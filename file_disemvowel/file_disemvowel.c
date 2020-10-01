@@ -22,10 +22,25 @@ int count = 0; //Initialize variable
   }
   return count;
 }
-
 //method that uses both previous methods to remove vowels and copy constanants over to destination
 void disemvowel(FILE* inputFile, FILE* outputFile) {
-
+//Initialize memory variables
+char* inBuff = (char*)calloc(BUF_SIZE, sizeof(char));
+char* outBuff = (char*)calloc(BUF_SIZE, sizeof(char));
+//Initialize variable for storing characters from inputFile
+int nChars = 0;
+//Store characters from inputFile to nChars
+nChars = (int)fread(inBuff, sizeof(char), BUF_SIZE, inputFile);
+//Check if no chars where stored, if there are characters then proceed to writing to output file.
+if(nChars != 0){
+int Consts = copy_non_vowels(nChars, inBuff, outBuff); //Store non-vowels from nChars into a variable Consts
+fwrite(outBuff, sizeof(char), Consts, outputFile); //Write to outputFile contents of Consts
+  }
+free(inBuff); //Free mem
+free(outBuff); //Free mem
+fclose(inputFile); //Close file
+fclose(outputFile); //Close file
+  
 }
 
 //running the main method
