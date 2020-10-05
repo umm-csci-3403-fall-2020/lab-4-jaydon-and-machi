@@ -16,13 +16,28 @@ bool is_dir(const char* path) {
    * return value from stat in case there is a problem, e.g., maybe the
    * the file doesn't actually exist.
    */
+struct stat *sbuf;
+sbuf = malloc(sizeof(struct stat));
+
+if (stat(path, sbuf) != 0) {
+  return false;
+ }
+ if (S_ISDIR(sbuf->st_mode)) {
+  free(sbuf);
+  return true;
+ } else {
+  free(sbuf);
+  return false;
+ }
 }
+
 
 /* 
  * I needed this because the multiple recursion means there's no way to
  * order them so that the definitions all precede the cause.
  */
 void process_path(const char*);
+
 
 void process_directory(const char* path) {
   /*
