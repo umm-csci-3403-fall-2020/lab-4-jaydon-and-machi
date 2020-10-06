@@ -51,12 +51,25 @@ void process_directory(const char* path) {
    * with a matching call to chdir() to move back out of it when you're
    * done.
    */
+  chdir(path);
+  struct dirent *dn;
+  DIR *dir = opendir(".");
+  while((dn = readdir(dir)) != NULL){
+	  if(strcmp(dn->d_name,"..") != 0 && strcmp(dn->d_name,".") != 0){
+		  process_path(dn->d_name);
+	  }
+  }
+  num_dirs++;
+  closedir(dir);
+  chdir("..");
 }
 
 void process_file(const char* path) {
   /*
    * Update the number of regular files.
+   *
    */
+  num_regular++;
 }
 
 void process_path(const char* path) {
